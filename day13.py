@@ -27,14 +27,27 @@ with open('input/day13.txt') as f:
 maxbus = max(buses)
 n = buses.index(maxbus)
 
-while True:
-    found = True
-    for i in range(len(buses)):
-        if buses[i] != 0 and n % buses[i] != i:
-            found = False
-            break
-    if found:
-        break
-    n += maxbus
+def gcd(a, b):
+    if a < b:
+        return gcd(b, a)
+    elif a % b == 0:
+        return b
+    else:
+        return gcd(b, a % b)
+
+def lcm(a, b):
+    return a * b // gcd(a, b)
+
+print(buses)
+
+bus_rest = [(val, i) for (i, val) in enumerate(buses) if val != 0]
+
+n = 0
+mul = 1
+
+for (bus, rest) in bus_rest:
+    while (n + rest) % bus != 0:
+        n += mul
+    mul = lcm(mul, bus)
 
 print(n)
